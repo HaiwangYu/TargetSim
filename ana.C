@@ -29,7 +29,7 @@ void ana(
 		TH2D *h2d_ezx = new TH2D(hname,
 				Form("edep [GeV], %02.0f<y<%02.0f cm; z [cm]; x [cm]", ybin[i], ybin[i+1]),
 				100, -25, 25, 100, -25, 25);
-		T->Project(hname, "x:z" , Form("e&&(y>%f&&y<%f)",ybin[i],ybin[i+1]));
+		T->Project(hname, "x:z" , Form("e*(y>%f&&y<%f)",ybin[i],ybin[i+1]));
 		outf->cd();
 		h2d_ezx->Write();
 	}
