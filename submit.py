@@ -60,19 +60,14 @@ for ijob in range(0, njobs) :
 
 	RUNSCRIPT.write('cd {} \n'.format(condor_local))
 
-	#if do_submition :
-	#	RUNSCRIPT.write('cp {} SvtxTracks.root \n'.format(input_file_name))
-	#else :
-	#	RUNSCRIPT.write('ln -sf {} SvtxTracks.root \n'.format(input_file_name))
-
 	cmd = 'time root -l -b -q Fun4All_G4_Target.C\\({}\\)'.format(nevents)
-	cmd = 'time root -l -b -q ana.C\\(\\)'
-
 	RUNSCRIPT.write(cmd + ' | tee {}.out \n'.format(ijob))
+
+	cmd = 'time root -l -b -q ana.C\\(\\)'
+	RUNSCRIPT.write(cmd + ' | tee -a {}.out \n'.format(ijob))
 
 	#RUNSCRIPT.write('cp Target_DSTReader.root {}/target_{:06d}.root \n'.format(output_path,ijob))
 	RUNSCRIPT.write('cp hist.root {}/hist_{:06d}.root \n'.format(output_path,ijob))
-
 	RUNSCRIPT.write('cp *.out {} \n'.format(output_path))
 
 	RUNSCRIPT.close()

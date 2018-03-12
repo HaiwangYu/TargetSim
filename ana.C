@@ -16,7 +16,7 @@ void ana(
 
 
 	TH2D *h2d_ezy = new TH2D("h2d_ezy","e [GeV]; z [cm]; y [cm]", 100, -25, 25, 100, -25, 25);
-	T->Project("h2d_ezy", "y:z", "e", "colz");
+	T->Project("h2d_ezy", "y:z", "e");
 	outf->cd();
 	h2d_ezy->Write();
 
@@ -24,12 +24,12 @@ void ana(
 	for(int i=0;i<51;++i) ybin[i] = i - 25.;
 
 	//for(int i=27;i<28;++i) {
-	for(int i=0;i<51;++i) {
+	for(int i=0;i<50;++i) {
 		const char* hname = Form("h2d_ezx_%02d",i);
 		TH2D *h2d_ezx = new TH2D(hname,
 				Form("edep [GeV], %02.0f<y<%02.0f cm; z [cm]; x [cm]", ybin[i], ybin[i+1]),
 				100, -25, 25, 100, -25, 25);
-		T->Project(hname, "x:z" , Form("e&&(y>%f&&y<%f)",ybin[i],ybin[i+1]), "colz");
+		T->Project(hname, "x:z" , Form("e&&(y>%f&&y<%f)",ybin[i],ybin[i+1]));
 		outf->cd();
 		h2d_ezx->Write();
 	}
