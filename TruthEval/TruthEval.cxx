@@ -70,15 +70,27 @@ int TruthEval::process_event(PHCompositeNode* topNode) {
 
 	ResetEvalVars();
 
-	multimap<int, float> _m_track_edep;
-	multimap<int, float> _m_track_path;
+	map<int, float> _m_track_edep;
+	map<int, float> _m_track_path;
 
 	for(auto iter=_g4hit_coil->getHits().first; iter!=_g4hit_coil->getHits().second; ++iter) {
 		PHG4Hit* hit = iter->second;
 		int track_id = hit->get_trkid();
 
 		float edep = hit->get_edep();
-		float path = hit->get_path_length();
+		
+		float x0 = hit->get_x(0);
+		float x1 = hit->get_x(1);
+		float y0 = hit->get_y(0);
+		float y1 = hit->get_y(1);
+		float z0 = hit->get_z(0);
+		float z1 = hit->get_z(1);
+
+		float path = sqrt(
+				pow(x1-x0,2)+
+				pow(y1-y0,2)+
+				pow(z1-z0,2)
+				);
 
 		auto iter_edep = _m_track_edep.find(track_id);
 		if( iter_edep != _m_track_edep.end()) {
@@ -121,7 +133,7 @@ int TruthEval::process_event(PHCompositeNode* topNode) {
 	for(auto iter = range.first; iter!= range.second; ++iter) {
 		PHG4Particle *particle =  iter->second;
 
-		int track_id = particle->get_track_id()>0;
+		int track_id = particle->get_track_id();
 		if(track_id>0) continue; ///input proton
 
 		TruthTrack track;
@@ -151,7 +163,7 @@ int TruthEval::process_event(PHCompositeNode* topNode) {
 		track.total_path_in_coil = 0;
 		auto iter_path = _m_track_path.find(track_id);
 		if(iter_path != _m_track_path.end()) {
-			track.total_path_in_coil = iter_edep->second;
+			track.total_path_in_coil = iter_path->second;
 		}
 
 		new ((*_tca_truthtracks)[iarr++]) TruthTrack(track);
