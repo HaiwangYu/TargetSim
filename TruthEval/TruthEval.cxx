@@ -41,11 +41,11 @@
 
 using namespace std;
 
-TruthEval::TruthEval(const std::string& name) :
+TruthEval::TruthEval(const std::string& name, const std::string &out) :
 SubsysReco(name),
 _event(0),
 _g4truth_container(nullptr),
-_out_name("eval.root")
+_out_name(out)
 {
 	ResetEvalVars();
 	InitEvalTree();

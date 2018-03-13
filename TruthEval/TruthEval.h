@@ -30,7 +30,7 @@ class TruthEval: public SubsysReco {
 
 public:
 
-	TruthEval(const std::string &name = "TruthEval");
+	TruthEval(const std::string &name = "TruthEval", const std::string &out = "eval.root");
 	virtual ~TruthEval() {
 	}
 
