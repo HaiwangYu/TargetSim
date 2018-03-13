@@ -115,7 +115,7 @@ int TruthEval::process_event(PHCompositeNode* topNode) {
 			track.total_edep_in_coil = iterm->second;
 		}
 
-		new ((*_tca_truthtracks)[iarr++]) track;
+		new ((*_tca_truthtracks)[iarr++]) TruthTrack(track);
 	}
 
 	_tout->Fill();
