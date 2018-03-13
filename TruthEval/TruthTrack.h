@@ -14,12 +14,16 @@ class TruthTrack : public TObject{
 public:
 	TruthTrack () :
 		pid(0),
-		vx(-9999), vy(-9999), vz(-9999),
-		px(-9999), py(-9999), pz(-9999),
-		edep_in_coil(-9999){}
+		vx(-9999), vy(-9999), vz(-9999), t(-9999),
+		px(-9999), py(-9999), pz(-9999), e(-9999),
+		det_id(-9999),
+		total_edep_in_coil(-9999){}
 	int pid;
-	double vx, vy, vz, px, py, pz;
-	double edep_in_coil;
+	double vx, vy, vz, t;
+	double px, py, pz, e;
+
+	int det_id; /// 0 : Target, 1: Coil
+	double total_edep_in_coil;
 
 	ClassDef(TruthTrack, 1)
 };

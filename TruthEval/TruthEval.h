@@ -19,6 +19,8 @@
 #include <map>
 
 class PHG4TruthInfoContainer;
+class PHG4HitContainer;
+
 class TFile;
 class TTree;
 
@@ -56,6 +58,8 @@ private:
 
 
 	PHG4TruthInfoContainer *_g4truth_container;
+
+	PHG4HitContainer *_g4hit_coil;
 
 	std::string _out_name;
 
