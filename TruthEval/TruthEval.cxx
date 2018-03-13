@@ -70,16 +70,33 @@ int TruthEval::process_event(PHCompositeNode* topNode) {
 
 	ResetEvalVars();
 
-	multimap<int, float> _m_track_edp;
+	multimap<int, float> _m_track_edep;
+	multimap<int, float> _m_track_path;
+
 	for(auto iter=_g4hit_coil->getHits().first; iter!=_g4hit_coil->getHits().second; ++iter) {
 		PHG4Hit* hit = iter->second;
 		int track_id = hit->get_trkid();
+
 		float edep = hit->get_edep();
-		auto iterm = _m_track_edp.find(track_id);
-		if( iterm != _m_track_edp.end()) {
-			iterm->second += edep;
+		float path = hit->get_path_length();
+
+		if(verbosity > 2) {
+			cout << __FILE__ << ": " << __LINE__ << endl;
+			hit->identify();
+		}
+
+		auto iter_edep = _m_track_edep.find(track_id);
+		if( iter_edep != _m_track_edep.end()) {
+			iter_edep->second += edep;
 		} else {
-			_m_track_edp.insert(multimap<int, float>::value_type(track_id, edep));
+			_m_track_edep.insert(multimap<int, float>::value_type(track_id, edep));
+		}
+
+		auto iter_path = _m_track_path.find(track_id);
+		if( iter_path != _m_track_path.end()) {
+			iter_path->second += path;
+		} else {
+			_m_track_path.insert(multimap<int, float>::value_type(track_id, path));
 		}
 	}
 
@@ -89,7 +106,7 @@ int TruthEval::process_event(PHCompositeNode* topNode) {
 		PHG4Particle *particle =  iter->second;
 
 		int track_id = particle->get_track_id()>0;
-		if(track_id) continue; ///input proton
+		if(track_id>0) continue; ///input proton
 
 		TruthTrack track;
 		track.pid = particle->get_pid();
@@ -110,9 +127,15 @@ int TruthEval::process_event(PHCompositeNode* topNode) {
 		else track.det_id = 1;
 
 		track.total_edep_in_coil = 0;
-		auto iterm = _m_track_edp.find(track_id);
-		if(iterm != _m_track_edp.end()) {
-			track.total_edep_in_coil = iterm->second;
+		auto iter_edep = _m_track_edep.find(track_id);
+		if(iter_edep != _m_track_edep.end()) {
+			track.total_edep_in_coil = iter_edep->second;
+		}
+
+		track.total_path_in_coil = 0;
+		auto iter_path = _m_track_path.find(track_id);
+		if(iter_path != _m_track_path.end()) {
+			track.total_path_in_coil = iter_edep->second;
 		}
 
 		new ((*_tca_truthtracks)[iarr++]) TruthTrack(track);

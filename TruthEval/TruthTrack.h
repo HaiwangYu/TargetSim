@@ -17,13 +17,16 @@ public:
 		vx(-9999), vy(-9999), vz(-9999), t(-9999),
 		px(-9999), py(-9999), pz(-9999), e(-9999),
 		det_id(-9999),
-		total_edep_in_coil(-9999){}
+		total_edep_in_coil(-9999),
+		total_path_in_coil(-9999)
+		{}
 	int pid;
-	double vx, vy, vz, t;
-	double px, py, pz, e;
+	float vx, vy, vz, t;
+	float px, py, pz, e;
 
 	int det_id; /// 0 : Target, 1: Coil
-	double total_edep_in_coil;
+	float total_edep_in_coil;
+	float total_path_in_coil;
 
 	ClassDef(TruthTrack, 1)
 };
