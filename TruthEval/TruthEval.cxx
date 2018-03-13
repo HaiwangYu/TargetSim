@@ -80,11 +80,6 @@ int TruthEval::process_event(PHCompositeNode* topNode) {
 		float edep = hit->get_edep();
 		float path = hit->get_path_length();
 
-		if(verbosity > 2) {
-			cout << __FILE__ << ": " << __LINE__ << endl;
-			hit->identify();
-		}
-
 		auto iter_edep = _m_track_edep.find(track_id);
 		if( iter_edep != _m_track_edep.end()) {
 			iter_edep->second += edep;
@@ -97,6 +92,27 @@ int TruthEval::process_event(PHCompositeNode* topNode) {
 			iter_path->second += path;
 		} else {
 			_m_track_path.insert(multimap<int, float>::value_type(track_id, path));
+		}
+
+		if(verbosity > 2) {
+			cout << __FILE__ << ": " << __LINE__ << endl;
+			hit->identify();
+			cout
+			<< " edep: " << edep
+			<< " path: " << path
+			<< endl;
+
+			cout
+			<< "_m_track_path: "
+			<< "{ " << _m_track_edep.end()->first
+			<< " -> " << _m_track_edep.end()->second << "}"
+			<< endl;
+
+			cout
+			<< "_m_track_path: "
+			<< "{ " << _m_track_path.end()->first
+			<< " -> " << _m_track_path.end()->second << "}"
+			<< endl;
 		}
 	}
 
