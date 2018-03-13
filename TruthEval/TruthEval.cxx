@@ -104,14 +104,14 @@ int TruthEval::process_event(PHCompositeNode* topNode) {
 
 			cout
 			<< "_m_track_path: "
-			<< "{ " << _m_track_edep.end()->first
-			<< " -> " << _m_track_edep.end()->second << "}"
+			<< "{ " << track_id
+			<< " -> " << _m_track_edep[track_id] << "}"
 			<< endl;
 
 			cout
 			<< "_m_track_path: "
-			<< "{ " << _m_track_path.end()->first
-			<< " -> " << _m_track_path.end()->second << "}"
+			<< "{ " <<track_id
+			<< " -> " << _m_track_path[track_id] << "}"
 			<< endl;
 		}
 	}
