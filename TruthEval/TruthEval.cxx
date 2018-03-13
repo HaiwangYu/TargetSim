@@ -47,8 +47,8 @@ _event(0),
 _g4truth_container(nullptr),
 _out_name(out)
 {
-	ResetEvalVars();
 	InitEvalTree();
+	ResetEvalVars();
 }
 
 int TruthEval::Init(PHCompositeNode* topNode) {
