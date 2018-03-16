@@ -3,7 +3,7 @@
 
 using namespace std;
 
-int Fun4All_G4_Target(const int nEvents = 10)
+int Fun4All_G4_Target(const int nEvents = 1000)
 {
 	const int use_g4steps = 1;
 

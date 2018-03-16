@@ -67,6 +67,7 @@ for ijob in range(0, njobs) :
 	RUNSCRIPT.write(cmd + ' | tee -a {}.out \n'.format(ijob))
 
 	#RUNSCRIPT.write('cp Target_DSTReader.root {}/target_{:06d}.root \n'.format(output_path,ijob))
+	RUNSCRIPT.write('cp eval.root {}/eval_{:06d}.root \n'.format(output_path,ijob))
 	RUNSCRIPT.write('cp hist.root {}/hist_{:06d}.root \n'.format(output_path,ijob))
 	RUNSCRIPT.write('cp *.out {} \n'.format(output_path))
 
