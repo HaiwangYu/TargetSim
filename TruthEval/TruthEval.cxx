@@ -78,6 +78,8 @@ int TruthEval::process_event(PHCompositeNode* topNode) {
 		int track_id = hit->get_trkid();
 
 		float edep = hit->get_edep();
+
+		_total_edep += edep;
 		
 		float x0 = hit->get_x(0);
 		float x1 = hit->get_x(1);
@@ -137,6 +139,7 @@ int TruthEval::process_event(PHCompositeNode* topNode) {
 		if(track_id>0) continue; ///input proton
 
 		TruthTrack track;
+		track.parentid = particle->get_parent_id();
 		track.pid = particle->get_pid();
 		track.px = particle->get_px();
 		track.py = particle->get_py();
@@ -151,19 +154,37 @@ int TruthEval::process_event(PHCompositeNode* topNode) {
 		track.vz = vtx->get_z();
 		track.t = vtx->get_t();
 
-		if(sqrt(track.vx*track.vx+track.vy*track.vy) < 1 and abs(track.vz) < 3.95) track.det_id = 0;
-		else track.det_id = 1;
 
-		track.total_edep_in_coil = 0;
+		float target_r = 1;
+		float target_z = 3.95;
+
+		float coil_in_r = 6;
+		float coil_ot_r = 22.225;
+	 	float coil_min_y = 2;
+		float coil_max_y = 24.7;	
+
+		if(
+				sqrt(track.vx*track.vx+track.vy*track.vy) < target_r
+				and abs(track.vz) < target_z
+				) track.det_id = 0;
+		else if(
+				sqrt(track.vx*track.vx+track.vz*track.vz) > coil_in_r and
+				sqrt(track.vx*track.vx+track.vz*track.vz) < coil_ot_r and
+				abs(track.vy) > coil_min_y and
+				abs(track.vy) < coil_max_y
+				) track.det_id = 1;
+		else track.det_id = 9999;
+
+		track.edep_coil = 0;
 		auto iter_edep = _m_track_edep.find(track_id);
 		if(iter_edep != _m_track_edep.end()) {
-			track.total_edep_in_coil = iter_edep->second;
+			track.edep_coil = iter_edep->second;
 		}
 
-		track.total_path_in_coil = 0;
+		track.path_coil = 0;
 		auto iter_path = _m_track_path.find(track_id);
 		if(iter_path != _m_track_path.end()) {
-			track.total_path_in_coil = iter_path->second;
+			track.path_coil = iter_path->second;
 		}
 
 		new ((*_tca_truthtracks)[iarr++]) TruthTrack(track);
@@ -185,6 +206,9 @@ int TruthEval::End(PHCompositeNode* topNode) {
 	PHTFileServer::get().cd(_out_name.c_str());
 	_tout->Write();
 
+	_tout1->Fill();
+	_tout1->Write();
+
 	return Fun4AllReturnCodes::EVENT_OK;
 }
 
@@ -196,6 +220,11 @@ int TruthEval::InitEvalTree() {
 
 	_tout = new TTree("T", "TruthEval");
 	_tout->Branch("TruthParticle", _tca_truthtracks);
+
+	_total_edep = 0;
+	_tout1 = new TTree("T1", "RunLevel");
+	_tout1->Branch("total_edep", &_total_edep, "total_edep/F");
+
 	return 0;
 }
 

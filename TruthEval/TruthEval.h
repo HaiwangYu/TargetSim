@@ -66,6 +66,8 @@ private:
 	TTree *_tout;
 	TClonesArray *_tca_truthtracks;
 
+	TTree *_tout1;
+	float _total_edep;
 };
 
 

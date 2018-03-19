@@ -41,7 +41,7 @@ int Fun4All_G4_Target(const int nEvents = 1000)
 	// shape of our world - it is a box
 	g4Reco->SetWorldShape("G4BOX");
 	// this is what our world is filled with
-	g4Reco->SetWorldMaterial("G4_AIR");
+	g4Reco->SetWorldMaterial("G4_Galactic");
 	// Geant4 Physics list to use
 	g4Reco->SetPhysicsList("FTFP_BERT");
 
