@@ -24,6 +24,11 @@ export LD_LIBRARY_PATH=/phenix/hhj/yuhw/GitHub/HaiwangYu/install_TargetSim/lib/:
 ```
 
 ## How to run
+```
+git clone git@github.com:HaiwangYu/TargetSim.git
+cd TargetSim
+root -l Fun4All_G4_Target.C
+```
+
 - 'Fun4All_G4_Target.C' is the main macro to run the simulation
-`root -l Fun4All_G4_Target.C`
 - 'ana.C' is the ploting macro
