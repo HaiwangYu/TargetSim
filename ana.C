@@ -1,3 +1,8 @@
+#include <TFile.h>
+#include <TTree.h>
+#include <TH2D.h>
+#include <TSystem.h>
+
 void ana(
 		const char* in = "DSTReader.root",
 		const char* out = "hist.root"
