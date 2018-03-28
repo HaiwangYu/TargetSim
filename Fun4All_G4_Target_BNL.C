@@ -5,6 +5,8 @@ using namespace std;
 
 int Fun4All_G4_Target_BNL(const int nEvents = 1000)
 {
+	double gap = 6.0;
+
 	const int use_g4steps = 1;
 
 	gSystem->Load("libfun4all");
@@ -27,7 +29,7 @@ int Fun4All_G4_Target_BNL(const int nEvents = 1000)
 	//  gun->set_name("proton");
 	double beam_angle = TMath::Pi()/6.;
 	gun->set_vtx(30*TMath::Tan(beam_angle), 0, -30);
-	gun->set_mom(-120*TMath::Sin(beam_angle), 0, 120*TMath::Cos(beam_angle));
+	gun->set_mom(-24*TMath::Sin(beam_angle), 0, 24*TMath::Cos(beam_angle));
 	se->registerSubsystem(gun);
 
 	// Fun4All G4 module
@@ -60,7 +62,7 @@ int Fun4All_G4_Target_BNL(const int nEvents = 1000)
 	tube->set_double_param("rot_y", 0.);
 	tube->set_double_param("rot_z", 0.);
 	tube->set_double_param("place_x", 0.);
-	tube->set_double_param("place_y", (12.0+6.0)/2);
+	tube->set_double_param("place_y", (12.0+gap)/2);
 	tube->set_double_param("place_z", 0.);
 	tube->set_double_param("radius", 7.9/2);
 	tube->set_double_param("thickness", (32.5-7.8)/2);
@@ -78,7 +80,7 @@ int Fun4All_G4_Target_BNL(const int nEvents = 1000)
 	tube->set_double_param("rot_y", 0.);
 	tube->set_double_param("rot_z", 0.);
 	tube->set_double_param("place_x", 0.);
-	tube->set_double_param("place_y", -(14.8+6.0)/2);
+	tube->set_double_param("place_y", -(14.8+gap)/2);
 	tube->set_double_param("place_z", 0.);
 	tube->set_double_param("radius", 7.9/2);
 	tube->set_double_param("thickness", (32.5-7.8)/2);

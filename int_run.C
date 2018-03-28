@@ -1,5 +1,5 @@
 void int_run() {
-	gROOT->ProcessLine(".x Fun4All_G4_Target.C\(-1\)");
+	gROOT->ProcessLine(".x Fun4All_G4_Target_BNL.C\(-1\)");
 	gROOT->ProcessLine(".L DisplayOn.C");
 	PHG4Reco* g4 = DisplayOn();
 	g4->ApplyCommand("/vis/viewer/set/background white");

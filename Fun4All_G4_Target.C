@@ -3,7 +3,7 @@
 
 using namespace std;
 
-int Fun4All_G4_Target(const int nEvents = 1000)
+int Fun4All_G4_Target(const int nEvents = 100)
 {
 	const int use_g4steps = 1;
 
@@ -18,7 +18,7 @@ int Fun4All_G4_Target(const int nEvents = 1000)
 	//////////////////////////////////////////
 	Fun4AllServer *se = Fun4AllServer::instance();
 	se->Verbosity(1);
-
+	
 	// particle gun
 	PHG4ParticleGun *gun = new PHG4ParticleGun("PGUN");
 	//  gun->set_name("anti_proton");
@@ -38,7 +38,7 @@ int Fun4All_G4_Target(const int nEvents = 1000)
 	g4Reco->SetWorldSizeX(200);
 	g4Reco->SetWorldSizeY(200);
 	g4Reco->SetWorldSizeZ(200);
-	// shape of our world - it is a box
+	// shape of our world - it is a tube
 	g4Reco->SetWorldShape("G4BOX");
 	// this is what our world is filled with
 	g4Reco->SetWorldMaterial("G4_Galactic");
@@ -63,7 +63,7 @@ int Fun4All_G4_Target(const int nEvents = 1000)
 	tube->set_double_param("place_z", 0.);
 	tube->set_double_param("radius", 12./2);
 	tube->set_double_param("thickness", (44.45-12.)/2);
-	tube->set_string_param("material", "G4_Fe");          // material of box
+	tube->set_string_param("material", "Coil");          // material of tube
 	tube->set_int_param("lengthviarapidity", 0);
 	tube->set_int_param("use_g4steps", use_g4steps);
 	tube->SetActive(1);                                   // it is an active volume - save G4Hits
@@ -81,7 +81,7 @@ int Fun4All_G4_Target(const int nEvents = 1000)
 	tube->set_double_param("place_z", 0.);
 	tube->set_double_param("radius", 12./2);
 	tube->set_double_param("thickness", (44.45-12.)/2);
-	tube->set_string_param("material", "G4_Fe");          // material of box
+	tube->set_string_param("material", "Coil");          // material of tube
 	tube->set_int_param("lengthviarapidity", 0);
 	tube->set_int_param("use_g4steps", use_g4steps);
 	tube->SetActive(1);                                   // it is an active volume - save G4Hits
@@ -98,7 +98,7 @@ int Fun4All_G4_Target(const int nEvents = 1000)
 	tube->set_double_param("place_z", 0.);
 	tube->set_double_param("radius", 0.);
 	tube->set_double_param("thickness", (2.)/2);
-	tube->set_string_param("material", "Target");          // material of box
+	tube->set_string_param("material", "Target");          // material of tube
 	tube->set_int_param("lengthviarapidity", 0);
 	tube->set_int_param("use_g4steps", use_g4steps);
 	tube->SetActive(1);                                   // it is an active volume - save G4Hits
