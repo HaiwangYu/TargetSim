@@ -6,6 +6,8 @@ using namespace std;
 int Fun4All_G4_Target_BNL(const int nEvents = 1000)
 {
 	double gap = 6.0;
+	double beam_energy = 24;
+	double beam_angle = TMath::Pi()/6.;
 
 	const int use_g4steps = 1;
 
@@ -19,7 +21,7 @@ int Fun4All_G4_Target_BNL(const int nEvents = 1000)
 	// Make the Server
 	//////////////////////////////////////////
 	Fun4AllServer *se = Fun4AllServer::instance();
-	se->Verbosity(1);
+	se->Verbosity(100);
 
 	// particle gun
 	PHG4ParticleGun *gun = new PHG4ParticleGun("PGUN");
@@ -27,9 +29,8 @@ int Fun4All_G4_Target_BNL(const int nEvents = 1000)
 	gun->set_name("proton");
 	//  gun->set_name("mu-");
 	//  gun->set_name("proton");
-	double beam_angle = TMath::Pi()/6.;
 	gun->set_vtx(30*TMath::Tan(beam_angle), 0, -30);
-	gun->set_mom(-24*TMath::Sin(beam_angle), 0, 24*TMath::Cos(beam_angle));
+	gun->set_mom(-beam_energy*TMath::Sin(beam_angle), 0, beam_energy*TMath::Cos(beam_angle));
 	se->registerSubsystem(gun);
 
 	// Fun4All G4 module
@@ -113,6 +114,15 @@ int Fun4All_G4_Target_BNL(const int nEvents = 1000)
 	se->registerSubsystem(g4Reco);
 
 	TruthEval* eval = new TruthEval("TruthEval","eval.root");
+	eval->beam_angle = beam_angle;
+	eval->target_r = 1.25;
+	eval->target_z = 4;
+	eval->coil_in_r = 7.9/2;
+	eval->coil_ot_r = 32.5/2;
+	eval->coil_min_y_0 = gap/2.;
+	eval->coil_max_y_0 = gap/2. + 12.;
+	eval->coil_min_y_1 = -gap/2.-14.8;
+	eval->coil_max_y_1 = -gap/2.;
 	se->registerSubsystem(eval);
 
 	///////////////////////////////////////////

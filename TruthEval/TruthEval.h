@@ -42,13 +42,19 @@ public:
 	int InitEvalTree();
 	int ResetEvalVars();
 
-	const std::string& get_out_name() const {
-		return _out_name;
-	}
+	std::string _out_name;
 
-	void set_out_name(const std::string& outName) {
-		_out_name = outName;
-	}
+	float beam_angle;
+
+	float target_r;
+	float target_z;
+	float coil_in_r;
+	float coil_ot_r;
+	float coil_min_y_0;
+	float coil_max_y_0;
+	float coil_min_y_1;
+	float coil_max_y_1;
+
 
 private:
 
@@ -60,8 +66,6 @@ private:
 	PHG4TruthInfoContainer *_g4truth_container;
 
 	PHG4HitContainer *_g4hit_coil;
-
-	std::string _out_name;
 
 	TTree *_tout;
 	TClonesArray *_tca_truthtracks;

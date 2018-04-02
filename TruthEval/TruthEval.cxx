@@ -25,6 +25,7 @@
 #include <TFile.h>
 #include <TTree.h>
 #include <TClonesArray.h>
+#include <TVector3.h>
 
 #include <cstring>
 #include <cmath>
@@ -43,12 +44,23 @@ using namespace std;
 
 TruthEval::TruthEval(const std::string& name, const std::string &out) :
 SubsysReco(name),
+_out_name(out),
 _event(0),
-_g4truth_container(nullptr),
-_out_name(out)
+_g4truth_container(nullptr)
 {
 	InitEvalTree();
 	ResetEvalVars();
+
+	beam_angle = 0;
+
+	target_r = 1;
+	target_z = 3.95;
+	coil_in_r = 6;
+	coil_ot_r = 22.225;
+	coil_min_y_0 = 2;
+	coil_max_y_0 = 24.7;	
+	coil_min_y_1 = -24.7;
+	coil_max_y_1 = -2;	
 }
 
 int TruthEval::Init(PHCompositeNode* topNode) {
@@ -80,7 +92,7 @@ int TruthEval::process_event(PHCompositeNode* topNode) {
 		float edep = hit->get_edep();
 
 		_total_edep += edep;
-		
+
 		float x0 = hit->get_x(0);
 		float x1 = hit->get_x(1);
 		float y0 = hit->get_y(0);
@@ -112,21 +124,21 @@ int TruthEval::process_event(PHCompositeNode* topNode) {
 			cout << __FILE__ << ": " << __LINE__ << endl;
 			hit->identify();
 			cout
-			<< " edep: " << edep
-			<< " path: " << path
-			<< endl;
+				<< " edep: " << edep
+				<< " path: " << path
+				<< endl;
 
 			cout
-			<< "_m_track_path: "
-			<< "{ " << track_id
-			<< " -> " << _m_track_edep[track_id] << "}"
-			<< endl;
+				<< "_m_track_path: "
+				<< "{ " << track_id
+				<< " -> " << _m_track_edep[track_id] << "}"
+				<< endl;
 
 			cout
-			<< "_m_track_path: "
-			<< "{ " <<track_id
-			<< " -> " << _m_track_path[track_id] << "}"
-			<< endl;
+				<< "_m_track_path: "
+				<< "{ " <<track_id
+				<< " -> " << _m_track_path[track_id] << "}"
+				<< endl;
 		}
 	}
 
@@ -141,10 +153,25 @@ int TruthEval::process_event(PHCompositeNode* topNode) {
 		TruthTrack track;
 		track.parentid = particle->get_parent_id();
 		track.pid = particle->get_pid();
-		track.px = particle->get_px();
-		track.py = particle->get_py();
-		track.pz = particle->get_pz();
-		track.e = particle->get_e();
+		float e = particle->get_e();
+		float px = particle->get_px();
+		float py = particle->get_py();
+		float pz = particle->get_pz();
+		TVector3 mom(px,py,pz);
+		mom.RotateY(beam_angle);
+		track.eta = mom.Eta();
+
+		float pt = mom.Pt();
+		float p = mom.Mag();
+		float mass = sqrt(e*e-p*p);
+
+		track.px = mom.Px();
+		track.py = mom.Py();
+		track.pz = mom.Pz();
+		track.e = e;
+		track.pt = pt;
+		track.p = p;
+		track.mass = mass;
 		int vtx_id = particle->get_vtx_id();
 
 		PHG4VtxPoint *vtx = _g4truth_container->GetVtx(vtx_id);
@@ -154,24 +181,17 @@ int TruthEval::process_event(PHCompositeNode* topNode) {
 		track.vz = vtx->get_z();
 		track.t = vtx->get_t();
 
-
-		float target_r = 1;
-		float target_z = 3.95;
-
-		float coil_in_r = 6;
-		float coil_ot_r = 22.225;
-	 	float coil_min_y = 2;
-		float coil_max_y = 24.7;	
-
 		if(
 				sqrt(track.vx*track.vx+track.vy*track.vy) < target_r
 				and abs(track.vz) < target_z
-				) track.det_id = 0;
+			) track.det_id = 0;
 		else if(
 				sqrt(track.vx*track.vx+track.vz*track.vz) > coil_in_r and
 				sqrt(track.vx*track.vx+track.vz*track.vz) < coil_ot_r and
-				abs(track.vy) > coil_min_y and
-				abs(track.vy) < coil_max_y
+				(
+				 (track.vy > coil_min_y_0 and track.vy < coil_max_y_0) or
+				 (track.vy > coil_min_y_1 and track.vy < coil_max_y_1)
+				)
 				) track.det_id = 1;
 		else track.det_id = 9999;
 
