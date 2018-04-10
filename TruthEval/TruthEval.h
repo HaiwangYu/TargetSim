@@ -44,10 +44,10 @@ public:
 
 	std::string _out_name;
 
-	float beam_angle;
-
+	float target_angle; // deg
 	float target_r;
-	float target_z;
+	float target_l;
+
 	float coil_in_r;
 	float coil_ot_r;
 	float coil_min_y_0;

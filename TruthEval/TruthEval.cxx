@@ -51,10 +51,10 @@ _g4truth_container(nullptr)
 	InitEvalTree();
 	ResetEvalVars();
 
-	beam_angle = 0;
-
+	target_angle = 0;
 	target_r = 1;
-	target_z = 3.95;
+	target_l = 7.9;
+
 	coil_in_r = 6;
 	coil_ot_r = 22.225;
 	coil_min_y_0 = 2;
@@ -180,7 +180,6 @@ int TruthEval::process_event(PHCompositeNode* topNode) {
 		float py = particle->get_py();
 		float pz = particle->get_pz();
 		TVector3 mom(px,py,pz);
-		mom.RotateY(beam_angle);
 		track.eta = mom.Eta();
 
 		float pt = mom.Pt();
@@ -203,9 +202,12 @@ int TruthEval::process_event(PHCompositeNode* topNode) {
 		track.vz = vtx->get_z();
 		track.t = vtx->get_t();
 
+		TVector3 vv(track.vx, track.vy, track.vz);
+		vv.RotateY(target_angle);
+
 		if(
-				sqrt(track.vx*track.vx+track.vy*track.vy) < target_r
-				and abs(track.vz) < target_z
+				vv.Perp() < target_r
+				and abs(vv.Z()) < target_l/2.
 			) track.det_id = 0;
 		else if(
 				sqrt(track.vx*track.vx+track.vz*track.vz) > coil_in_r and
