@@ -20,7 +20,9 @@ public:
 		parentid(-9999),
 		det_id(-9999),
 		edep_coil(-9999),
-		path_coil(-9999)
+		path_coil(-9999),
+		edep_wire(-9999),
+		path_wire(-9999)
 		{}
 	int pid;
 	float vx, vy, vz, t;
@@ -31,6 +33,8 @@ public:
 	int det_id; /// 0 : Target, 1: Coil, 9999: other
 	float edep_coil;
 	float path_coil;
+	float edep_wire;
+	float path_wire;
 
 	ClassDef(TruthTrack, 1)
 };

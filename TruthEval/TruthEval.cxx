@@ -82,8 +82,11 @@ int TruthEval::process_event(PHCompositeNode* topNode) {
 
 	ResetEvalVars();
 
-	map<int, float> _m_track_edep;
-	map<int, float> _m_track_path;
+	map<int, float> _m_track_edep_coil;
+	map<int, float> _m_track_path_coil;
+
+	map<int, float> _m_track_edep_wire;
+	map<int, float> _m_track_path_wire;
 
 	for(auto iter=_g4hit_coil->getHits().first; iter!=_g4hit_coil->getHits().second; ++iter) {
 		PHG4Hit* hit = iter->second;
@@ -106,18 +109,37 @@ int TruthEval::process_event(PHCompositeNode* topNode) {
 				pow(z1-z0,2)
 				);
 
-		auto iter_edep = _m_track_edep.find(track_id);
-		if( iter_edep != _m_track_edep.end()) {
+		auto iter_edep = _m_track_edep_coil.find(track_id);
+		if( iter_edep != _m_track_edep_coil.end()) {
 			iter_edep->second += edep;
 		} else {
-			_m_track_edep.insert(multimap<int, float>::value_type(track_id, edep));
+			_m_track_edep_coil.insert(multimap<int, float>::value_type(track_id, edep));
 		}
 
-		auto iter_path = _m_track_path.find(track_id);
-		if( iter_path != _m_track_path.end()) {
+		auto iter_path = _m_track_path_coil.find(track_id);
+		if( iter_path != _m_track_path_coil.end()) {
 			iter_path->second += path;
 		} else {
-			_m_track_path.insert(multimap<int, float>::value_type(track_id, path));
+			_m_track_path_coil.insert(multimap<int, float>::value_type(track_id, path));
+		}
+
+
+		set<unsigned int> wire_ids = {10, 11, 20, 21, 30, 31, 110, 111, 120, 121, 130, 131};
+		unsigned int layer_id = hit->get_layer();
+		if(wire_ids.find(layer_id)!=wire_ids.end()) {
+			auto iter_edep = _m_track_edep_wire.find(track_id);
+			if( iter_edep != _m_track_edep_wire.end()) {
+				iter_edep->second += edep;
+			} else {
+				_m_track_edep_wire.insert(multimap<int, float>::value_type(track_id, edep));
+			}
+
+			auto iter_path = _m_track_path_wire.find(track_id);
+			if( iter_path != _m_track_path_wire.end()) {
+				iter_path->second += path;
+			} else {
+				_m_track_path_wire.insert(multimap<int, float>::value_type(track_id, path));
+			}
 		}
 
 		if(verbosity > 2) {
@@ -129,15 +151,15 @@ int TruthEval::process_event(PHCompositeNode* topNode) {
 				<< endl;
 
 			cout
-				<< "_m_track_path: "
+				<< "_m_track_path_coil: "
 				<< "{ " << track_id
-				<< " -> " << _m_track_edep[track_id] << "}"
+				<< " -> " << _m_track_edep_coil[track_id] << "}"
 				<< endl;
 
 			cout
-				<< "_m_track_path: "
+				<< "_m_track_path_coil: "
 				<< "{ " <<track_id
-				<< " -> " << _m_track_path[track_id] << "}"
+				<< " -> " << _m_track_path_coil[track_id] << "}"
 				<< endl;
 		}
 	}
@@ -148,7 +170,7 @@ int TruthEval::process_event(PHCompositeNode* topNode) {
 		PHG4Particle *particle =  iter->second;
 
 		int track_id = particle->get_track_id();
-		if(track_id>0) continue; ///input proton
+		//if(track_id>0) continue; ///input proton
 
 		TruthTrack track;
 		track.parentid = particle->get_parent_id();
@@ -195,16 +217,32 @@ int TruthEval::process_event(PHCompositeNode* topNode) {
 				) track.det_id = 1;
 		else track.det_id = 9999;
 
-		track.edep_coil = 0;
-		auto iter_edep = _m_track_edep.find(track_id);
-		if(iter_edep != _m_track_edep.end()) {
-			track.edep_coil = iter_edep->second;
+		{
+			track.edep_coil = 0;
+			auto iter_edep = _m_track_edep_coil.find(track_id);
+			if(iter_edep != _m_track_edep_coil.end()) {
+				track.edep_coil = iter_edep->second;
+			}
+
+			track.path_coil = 0;
+			auto iter_path = _m_track_path_coil.find(track_id);
+			if(iter_path != _m_track_path_coil.end()) {
+				track.path_coil = iter_path->second;
+			}
 		}
 
-		track.path_coil = 0;
-		auto iter_path = _m_track_path.find(track_id);
-		if(iter_path != _m_track_path.end()) {
-			track.path_coil = iter_path->second;
+		{
+			track.edep_wire = 0;
+			auto iter_edep = _m_track_edep_wire.find(track_id);
+			if(iter_edep != _m_track_edep_wire.end()) {
+				track.edep_wire = iter_edep->second;
+			}
+
+			track.path_wire = 0;
+			auto iter_path = _m_track_path_wire.find(track_id);
+			if(iter_path != _m_track_path_wire.end()) {
+				track.path_wire = iter_path->second;
+			}
 		}
 
 		new ((*_tca_truthtracks)[iarr++]) TruthTrack(track);
