@@ -32,6 +32,11 @@ void ana(
 	outf->cd();
 	h2d_ezy->Write();
 
+	TH2D *h2d_ezy_0 = new TH2D("h2d_ezy_0","edep [GeV], |x|<0.5cm; Z [cm]; Y [cm]", 50, -25, 25, 50, -25, 25);
+	T->Project("h2d_ezy_0", "avg_y:avg_z", "edep*(abs(avg_x)<0.5)");
+	outf->cd();
+	h2d_ezy->Write();
+
 	double ybin[51];
 	for(int i=0;i<51;++i) ybin[i] = i - 25.;
 

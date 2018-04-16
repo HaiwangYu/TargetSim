@@ -34,10 +34,11 @@ int Fun4All_G4_BNL_R1(const int nEvents = 1)
 	// particle gun
 	PHG4ParticleGun *gun = new PHG4ParticleGun("PGUN");
 	gun->set_name("proton");
-	gun->set_vtx(0, 0, -5);
+	gun->set_vtx(0, 0, -20);
 	gun->set_mom(0, 0, beam_energy);
 	TF2 *beam_profile = new TF2("beam_profile",
-			"(((x**2+y**2)<=2.72)*exp(-(x**2+y**2)/0.605))+(((x**2+y**2)>2.72&&(x**2+y**2)<=25&&abs(y)<1.8)*1.65*exp(-4.5)/(sqrt(x**2+y**2)))",-5,5,-5,5);
+			//"(((x**2+y**2)<=2.72)*exp(-(x**2+y**2)/0.605))+(((x**2+y**2)>2.72&&(x**2+y**2)<=25&&abs(y)<1.8)*1.65*exp(-4.5)/(sqrt(x**2+y**2)))",-5,5,-5,5);
+			"(((x**2+y**2)<=2.72)*exp(-(x**2+y**2)/0.605))+(((x**2+y**2)>2.72&&(x**2+y**2)<=25)*1.65*exp(-4.5)/(sqrt(x**2+y**2)))",-5,5,-5,5);
 	gun->set_beam_profile(beam_profile);
 	se->registerSubsystem(gun);
 
