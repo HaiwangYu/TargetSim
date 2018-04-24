@@ -6,7 +6,8 @@ using namespace std;
 int Fun4All_G4_E1039_R2(const int nEvents = 1)
 {
 	const int use_g4steps = 1;
-	const double target_l = 7.9;
+	const double target_l = 1; //cm
+	const double target_z = (7.9-target_l)/2.; //cm
 
 	gSystem->Load("libfun4all");
 	gSystem->Load("libg4detectors");
@@ -86,7 +87,7 @@ int Fun4All_G4_E1039_R2(const int nEvents = 1)
 	target->set_double_param("rot_z", 0.);
 	target->set_double_param("place_x", 0.);
 	target->set_double_param("place_y", 0.);
-	target->set_double_param("place_z", (7.9-target_l)/2.);
+	target->set_double_param("place_z", target_z);
 	target->set_double_param("radius", 0.);
 	target->set_double_param("thickness", (2.)/2);
 	target->set_string_param("material", "Target");          // material of target
@@ -102,6 +103,8 @@ int Fun4All_G4_E1039_R2(const int nEvents = 1)
 	se->registerSubsystem(g4Reco);
 
 	TruthEval* eval = new TruthEval("TruthEval","eval.root");
+	eval->target_l = target_l;
+	eval->target_z = target_z;
 	se->registerSubsystem(eval);
 
 	///////////////////////////////////////////

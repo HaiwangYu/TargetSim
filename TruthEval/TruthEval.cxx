@@ -54,6 +54,7 @@ _g4truth_container(nullptr)
 	target_angle = 0;
 	target_r = 1;
 	target_l = 7.9;
+	target_z = 0;
 
 	coil_in_r = 6;
 	coil_ot_r = 22.225;
@@ -202,7 +203,7 @@ int TruthEval::process_event(PHCompositeNode* topNode) {
 		track.vz = vtx->get_z();
 		track.t = vtx->get_t();
 
-		TVector3 vv(track.vx, track.vy, track.vz);
+		TVector3 vv(track.vx, track.vy, track.vz - target_z);
 		vv.RotateY(target_angle);
 
 		if(

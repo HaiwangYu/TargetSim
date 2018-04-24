@@ -47,6 +47,7 @@ public:
 	float target_angle; // deg
 	float target_r;
 	float target_l;
+	float target_z;
 
 	float coil_in_r;
 	float coil_ot_r;
