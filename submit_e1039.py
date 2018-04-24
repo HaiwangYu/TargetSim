@@ -60,7 +60,7 @@ for ijob in range(0, njobs) :
 
 	RUNSCRIPT.write('cd {} \n'.format(condor_local))
 
-	cmd = 'time root -l -b -q Fun4All_G4_E1039_R1.C\\({}\\)'.format(nevents)
+	cmd = 'time root -l -b -q Fun4All_G4_E1039_R2.C\\({}\\)'.format(nevents)
 	RUNSCRIPT.write(cmd + ' | tee {}.out \n'.format(ijob))
 
 	cmd = 'time root -l -b -q ana.C\\(\\)'
