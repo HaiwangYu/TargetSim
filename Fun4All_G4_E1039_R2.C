@@ -6,7 +6,7 @@ using namespace std;
 int Fun4All_G4_E1039_R2(const int nEvents = 1)
 {
 	const int use_g4steps = 1;
-	const double target_l = 1; //cm
+	const double target_l = 7.9; //cm
 	const double target_z = (7.9-target_l)/2.; //cm
 
 	gSystem->Load("libfun4all");
@@ -27,14 +27,15 @@ int Fun4All_G4_E1039_R2(const int nEvents = 1)
 	gun->set_vtx(0, 0, -400); //-363.32 cm
 	gun->set_mom(0, 0, 120);
 	TF2 *beam_profile = new TF2("beam_profile",
-			"(((x**2+y**2)<=0.81)*exp(-(x**2+y**2)/0.18))+(((x**2+y**2)>0.81&&(x**2+y**2)<=25&&abs(y)<1.)*0.9*exp(-4.5)/(sqrt(x**2+y**2)))",-5,5,-5,5);
+			//"(((x**2+y**2)<=0.81)*exp(-(x**2+y**2)/0.18))+(((x**2+y**2)>0.81&&(x**2+y**2)<=25&&abs(y)<1.)*0.9*exp(-4.5)/(sqrt(x**2+y**2)))",
+			"(((x**2+y**2)<=0.81)*exp(-(x**2+y**2)/0.18))+(((x**2+y**2)>0.81&&(x**2+y**2)<=25)*0.9*exp(-4.5)/(sqrt(x**2+y**2)))",
+			-5,5,-5,5);
 	gun->set_beam_profile(beam_profile);
 	se->registerSubsystem(gun);
 
 	// Fun4All G4 module
 	PHG4Reco *g4Reco = new PHG4Reco();
 	//g4Reco->G4Seed(123);
-	// no magnetic field
 	//g4Reco->set_field(5.);
 	g4Reco->set_field_map("target.field.root",4);
 	// size of the world - every detector has to fit in here

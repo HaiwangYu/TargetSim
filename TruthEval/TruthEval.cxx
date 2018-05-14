@@ -181,7 +181,8 @@ int TruthEval::process_event(PHCompositeNode* topNode) {
 		float py = particle->get_py();
 		float pz = particle->get_pz();
 		TVector3 mom(px,py,pz);
-		track.eta = mom.Eta();
+		if(track_id<0)
+			track.eta = mom.Eta();
 
 		float pt = mom.Pt();
 		float p = mom.Mag();
