@@ -123,26 +123,26 @@ int Fun4All_Test(const int nEvents = 1)
 
 	se->registerSubsystem(g4Reco);
 
-	//TruthEval* eval = new TruthEval("TruthEval","eval.root");
-	//eval->target_l = target_l;
-	//eval->target_z = target_z;
-	//se->registerSubsystem(eval);
+	TruthEval* eval = new TruthEval("TruthEval","eval.root");
+	eval->target_l = target_l;
+	eval->target_z = target_z;
+	se->registerSubsystem(eval);
 
 	///////////////////////////////////////////
 	// Output
 	///////////////////////////////////////////
 
 	// save a comprehensive  evaluation file
-	PHG4DSTReader *ana = new PHG4DSTReader(
-			string("DSTReader.root"));
-	ana->set_save_particle(true);
-	ana->set_load_all_particle(false);
-	ana->set_load_active_particle(true);
-	ana->set_save_vertex(true);
-	//ana->AddNode("Coil");
-	ana->AddNode("Target");
-	//ana->AddNode("Collimator");
-	se->registerSubsystem(ana);
+	//PHG4DSTReader *ana = new PHG4DSTReader(
+	//		string("DSTReader.root"));
+	//ana->set_save_particle(true);
+	//ana->set_load_all_particle(false);
+	//ana->set_load_active_particle(true);
+	//ana->set_save_vertex(true);
+	////ana->AddNode("Coil");
+	//ana->AddNode("Target");
+	////ana->AddNode("Collimator");
+	//se->registerSubsystem(ana);
 
 	// input - we need a dummy to drive the event loop
 	Fun4AllInputManager *in = new Fun4AllDummyInputManager("JADE");
