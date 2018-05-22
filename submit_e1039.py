@@ -11,7 +11,7 @@ njobs = int(sys.argv[2])
 nevents = int(sys.argv[3])
 do_submition = bool(sys.argv[4])
 
-sphenix_build_tag = 'new'
+sphenix_build_tag = 'ana.101'
 local_build_tag = 'install'
 
 condor_base_path = '/gpfs/mnt/gpfs04/sphenix/user/yuhw/workspace/TargetSim/TargetSim'

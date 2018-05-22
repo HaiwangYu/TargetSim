@@ -1,6 +1,6 @@
 void int_run() {
-	gROOT->ProcessLine(".x Fun4All_Test.C\(-1\)");
-	//gROOT->ProcessLine(".x Fun4All_G4_E1039_R2.C\(-1\)");
+	//gROOT->ProcessLine(".x Fun4All_Test.C\(-1\)");
+	gROOT->ProcessLine(".x Fun4All_G4_E1039_R2.C\(-1\)");
 	gROOT->ProcessLine(".L DisplayOn.C");
 	PHG4Reco* g4 = DisplayOn();
 	g4->ApplyCommand("/vis/modeling/trajectories/generic-0/default/setAuxPtsVisible true");
